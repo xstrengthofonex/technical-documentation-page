@@ -12,8 +12,22 @@ body {
 	padding: 30px;	
 }
 
+code {
+	white-space: pre;
+	background: #eee;
+	font-family: monospace;
+	padding: 20px;
+	font-size: 14px;
+	display: block;
+}
+
 #navbar header{
 	font-size: 36px;
+}
+
+#navbar ul {
+	list-style: none;
+	padding: 0;
 }
 
 #navbar ul li {

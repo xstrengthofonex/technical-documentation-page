@@ -30,14 +30,29 @@
             </section>
             <section class="main-section" id="Single_Responsible_Principle">
                 <header>Single Responsible Principle</header>
-                <p></p>
-                <p></p>
-                <code></code>
+                <p>The best modules are those that have just one responsibility.</p>
+<code>public class Employee{
+    public double calculatePay(){
+
+    }
+
+    public void save(){
+
+    }
+
+    public String describeEmployee(){
+
+    }
+}</code>      
+                <p>How many responsibilities does this class have? There are 3 right, because there are 3 methods, but what if we add a new method - findByID. Now how many responsibilities does the class have? The answer is still 3 because findbyID is part of the database family. Similarly if you added methods for deductions and calculating taxes they would be in the same family as calculatePay. The class and methods have responsibilities to the users, specifically the users who request changes to the software. A responsibility is a source of change. Who are the people who are the source of change for the Employee class?</p>          
+                <p>Separate the user from the roles they play. When users play certain roles they are called actors. There are three actors in the Employee class.
                 <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    <li>Policy</li>
+                    <li>Operations</li>
+                    <li>Architecture</li>
                 </ul>
+                <p>The actor for each responsibility should be the single source of change for that responsibility. The needs of the users change frequently and the software can easily get out of sync with the customers changing needs. The primary value of software is that it should be easy to change</p>
+                <p>What is it that meets the needs of the users. Responsibilities are families of functions that respond to actors needs. We can make software easier to change and enhance by choosing which module to put our functions in.</p>
             </section>
             <section class="main-section" id="Open/Closed_Principle">
                 <header>Open/Closed Principle</header>
