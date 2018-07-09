@@ -13,7 +13,7 @@ body {
 }
 
 code {
-	white-space: pre;
+	white-space: pre-wrap;
 	background: #eee;
 	font-family: monospace;
 	padding: 20px;
