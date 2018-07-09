@@ -8,6 +8,8 @@ body {
 }
 
 #navbar {
+	position: fixed;
+	display: blocks;
 	flex: 0 0 300px;
 	padding: 30px;	
 }
@@ -46,6 +48,7 @@ code {
 
 #main-doc {
 	padding: 30px;
+	margin-left: 330px;
 }
 
 .main-section header {
