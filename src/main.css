@@ -1,3 +1,60 @@
 body {
-    font-family: sans-serif;
+	color: #444;
+	font-family: 'Lato', sans-serif;
+}
+
+#container {
+	display: flex;
+}
+
+#navbar {
+	flex: 0 0 300px;
+	padding: 30px;	
+}
+
+#navbar header{
+	font-size: 36px;
+}
+
+#navbar ul li {
+	padding: 10px 0px;	
+}
+
+.nav-link {
+	font-size: 20px;
+	text-decoration: none;
+	color: #2c3e50;
+}
+
+.nav-link:hover {
+	color: #7f8c8d;
+}
+
+#main-doc {
+	padding: 30px;
+}
+
+.main-section header {
+	font-size: 28px;
+}
+
+.main-section p {
+	font-size: 16px;
+	letter-spacing: 1px;
+	line-height: 1.2;	
+}
+
+@media screen and (max-width: 800px){
+	#container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#navbar {
+		flex-grow: 1;
+	}
+
+	#main-doc {
+		flex-grow: 1;
+	}
 }
