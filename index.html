@@ -33,15 +33,15 @@
                 <p>The best modules are those that have just one responsibility.</p>
 <code>public class Employee{
     public double calculatePay(){
-
+        ...
     }
 
     public void save(){
-
+        ...
     }
 
     public String describeEmployee(){
-
+        ...
     }
 }</code>      
                 <p>How many responsibilities does this class have? There are 3 right, because there are 3 methods, but what if we add a new method - findByID. Now how many responsibilities does the class have? The answer is still 3 because findbyID is part of the database family. Similarly if you added methods for deductions and calculating taxes they would be in the same family as calculatePay. The class and methods have responsibilities to the users, specifically the users who request changes to the software. A responsibility is a source of change. Who are the people who are the source of change for the Employee class?</p>          
@@ -53,35 +53,109 @@
                 </ul>
                 <p>The actor for each responsibility should be the single source of change for that responsibility. The needs of the users change frequently and the software can easily get out of sync with the customers changing needs. The primary value of software is that it should be easy to change</p>
                 <p>What is it that meets the needs of the users. Responsibilities are families of functions that respond to actors needs. We can make software easier to change and enhance by choosing which module to put our functions in.</p>
+                <p>To use the facade pattern put all three function families back together in a facade class. This hides the implementation from the actors and makes finding the implementations easier. But there is still a link between the facade and the implementations.</p>
+<code>public class EmployeeFacade{
+    private EmployeeGateway employeeGateway;
+    private EmployeeReporter employeeReporter;
+    private EmployeePolicy employeeReporter;
+
+    EmployeeFacade(EmployeeGateway employeeGateway, 
+                   EmployeeReporter employeeReporter, 
+                   EmployeePolicy employeePolicy){
+        this.employeeGateway = employeeGateway;
+        this.employeeReporter = employeeReporter;
+        this.employeePolicy = employeePolicy;
+    }
+
+    public double calculatePay(){
+        this.employeePolicy.calculatePay();
+        ...
+    }
+
+    public void save(){
+        this.employeeGateway.save();
+        ...
+    }
+
+    public String describeEmployee(){
+        this.employeeReporter.describeEmployee();
+        ...
+    }
+}</code> 
+            <p>Creating an interface for each of the classes and making the Employee implementation depend on those interfaces enables the actors to remain decoupled because the actors depend only on the interfaces. But we are still faced with the problem of having to search for those interfaces in separate source files and also the implementation of the classes are coupled as they are held in the same class.</p>
             </section>
             <section class="main-section" id="Open/Closed_Principle">
                 <header>Open/Closed Principle</header>
-                <p></p>
-                <p></p>
-                <code></code>
-                <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
+                <p>A software module should open to extension but closed to modification. It should be very simple to change the behavior of the module, but the closed aspect should not change the source code. How can you change the behavior of a module without changing the source code?</p>
+                <p>We arrange the dependencies so that we change the lower level details without changing the copy module.</p>
+                <p>Abstraction and Inversion - By inserting an interface between the module and the devices the dependencies are inverted. The copy module depends on high level abstraction without any knowledge of the lower level implementation, allowing for extensibility without altering the source code.</p>
+<code>void checkOut(Receipt receipt) { 
+    Money total = Money.zero;
+    for (Item item: items) {
+        total += items.getPrice();
+        receipt.addItem(item);
+    }
+    Payment p = acceptCash(total);
+    receipt.addPayment(p);
+}     
+</code>
+<p>This algorithm works great for cash but what if we need to add a payment method for card. We could use an if statement but that would be modifying the source code. A better solution would be to have a paymentMethod be an argument to a method. The paymentMethod would be an interface that has different implementations for cash and for card.</p>
+<code>void checkOut(Receipt receipt, PaymentMethod pm) { 
+    Money total = Money.zero;
+    for (Item item: items) {
+        total += items.getPrice();
+        receipt.addItem(item);
+    }
+    Payment p = pm.acceptPayment(total);
+    receipt.addPayment(p);
+}      
+</code>
+            <p>If you design systems conforming to the open-closed principle, you do so by writing new code and not by modifying old code. If the old code doesn’t have to be modified it can’t rot. Adding a new feature should be adding a new feature not modifying current features.</p>
             </section>
             <section class="main-section" id="Liskov_Substitution_Principle">
                 <header>Liskov Substitution Principle</header>
-                <p></p>
-                <p></p>
-                <code></code>
+                <p>What is a type? It doesn’t matter what’s inside the type we only care about the operations it can perform. A type is a bag of operations. We care about what a type can do. There is data within it but it is hidden behind method. The data is private.</p>
+                <p>What is subtype? A formal definition of subtypes was put forward by Barbara Liskov 
+                    “What is wanted here is something like the following substitution: if for each object 01 of type S there is an object o2 of type T such that all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2 then S is a subtype of T.”</p>
+                <p>This is an asymmetry of usability.  The user U can use a type of T. The users U can also use subtype S.</p>
+                <p>In dynamically typed languages the idea is different. The compiler doesn’t know what the type is until runtime. If the object can respond to the call (message sending) then the invocation occurs if not an error happens. This is called duck typing. If you see a bird that quacks, walks and swims like a duck you call it a duck.</p>
+                <p>A type is a bag of methods and since a subtype is also a type it needs to have the same methods in it as the parent type. However the implementation can be different. In static type languages this is achieved through inheritance of a type. In dynamic languages it is accomplished by including the methods in the class. The definition of a subtype means it is substitutable for the parent type.</p>
+                <p>How do you know if you are violating the Liskov Principle?</p>
+                <ul>
+                    <li>If the base class does something, the derived classes must do it too and do it in a way that does not violate the expectations of the caller.</li>
+                    <li>A subtype can do more than itself parent type but it can never do less.</li>
+                    <li>If you have a derived class that has implemented functions that do nothing, it is likely there is a violation.</li>
+                    <li>A derived function should not throw an unconditional exception.</li>
+                    <li>The presence of isinstanceof is also a likely violation, the only time this should be used is if you already know the type of the object. </li>
+                </ul>
             </section>
             <section class="main-section" id="Interface_Segregation_Principle">
                 <header>Interface Segregation Principle</header>
-                <p></p>
-                <p></p>
-                <code></code>
+                <p>Given a switch and a light design a software that turns a light on when the switch is activated.One simple solution may be to have the Switch send a message turnOn to the Light.</p>
+<code>public class Switch {
+    private Light light;
+    
+    public Switch(Light light) {
+        this.light = light;
+    }
+    
+    public void activate() {
+        light.turnOn();
+    }
+}        
+</code>
+                <p>If you notice the switch class contains a light. The switch shouldn’t have to know about the light. A switch should be able to control a fan or a motor. By placing an interface between the two it allows for other implementations of the turnOn method.</p>
+                <p>The switch has a tight logical coupling to the Interface. The Light doesn’t care much for the Interface and the Interface doesn’t know the Light exists. The light component is a plugin to to the switch component. The name of the interface should reflect the coupling with the switch. How about Switchable?</p>
+                <p>The name of an interface have more to do with the classes that use them than the classes that implement them.The reason Java and C# have interfaces is because the language designs decided not implement a reasonable solution for multiple inheritance. You can only have one base class.</p>
+                <p>The problem that the interface integration addresses is the problem of fat classes. Classes that have too many methods or things that depend on them. The issues of fat classes create a coupling problem. When faced with a fat class you can create interfaces with the methods that the client needs. Components can be deployed and developed separately.</p>
+                <p>The goal is to prevent backward coupling, so that you don’t depend on methods you don’t call. Don’t depend on things you don’t need. It will make code rigid and fragile.</p>
             </section>
             <section class="main-section" id="Dependency_Inversion_Principle">
                 <header>Dependency Inversion Principle</header>
-                <p></p>
-                <p></p>
-                <code></code>
+                <p>In static typed languages, when the compiler compiles a class A that has a dependency on class B, the compiler need to know details about class B. It first hunts for B.class and if it is out of date with B.java the class is recompiled.  You cannot compile one module. If you compile one module, you compile all the dependent modules. </p>
+                <p>Compile time is not a problem with modern computers, but deployment can be an issue. A change to the source code in one module causes the recompilation of all dependencies and everything needs to be redeployed.</p>
+                <p>Inverting dependencies is the means of creating boundaries. We decide which dependencies to invert against the flow of control so that all the dependencies flow in the same direction across the boundary. This is also how plugins work.</p>
+                <p>The caller has no idea who or what they are calling. You create an independently deployable and independently developable you need to invert the dependencies. Low level details should depend on high level details.</p>
             </section>
         </main>
     </div>

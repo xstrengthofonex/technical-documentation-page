@@ -9,7 +9,6 @@ body {
 
 #navbar {
 	position: fixed;
-	display: blocks;
 	flex: 0 0 300px;
 	padding: 30px;	
 }
@@ -21,6 +20,7 @@ code {
 	padding: 20px;
 	font-size: 14px;
 	display: block;
+	margin: 20px 0;
 }
 
 #navbar header{
@@ -69,9 +69,11 @@ code {
 
 	#navbar {
 		flex-grow: 1;
+		position: initial;
 	}
 
 	#main-doc {
 		flex-grow: 1;
+		margin: 0;
 	}
 }
